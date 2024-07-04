@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <h2 class="mt-5">Welcome, {{ user.nombre_completo }}</h2>
+        <!-- Add your CRUD operations here -->
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const token = localStorage.getItem('access_token');
+        if (!token) {
+            window.location.href = '/auth/login';
+            return;
+        }
+
+        fetch('/dashboard', {
+            method: 'GET',
+            headers: {
+                'Authorization': 'Bearer ' + token
+            }
+        }).then(response => {
+            if (response.status === 401) {
+                window.location.href = '/auth/login';
+            } else {
+                response.text().then(data => {
+                    document.body.innerHTML = data;
+                });
+            }
+        }).catch(error => {
+            console.error('Error:', error);
+            window.location.href = '/auth/login';
+        });
+    });
+</script>
+{% endblock %}

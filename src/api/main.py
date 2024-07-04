@@ -1,18 +1,16 @@
 from fastapi import FastAPI, Request, Depends
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
-from fastapi.security import OAuth2PasswordBearer
+from .auth import router as auth_router, get_current_user
 from .usuarios import router as usuarios_router
 from .productos import router as productos_router
 from .programas import router as programas_router
 from .proyectos import router as proyectos_router
-from .auth import router as auth_router, get_current_user
-from ..db.database import engine
+from ..db.database import init_db
 from ..db import models
-from .models import UsuarioCreate
 
-# Automatically create database tables based on SQLAlchemy models at startup.
-models.Base.metadata.create_all(bind=engine)
+# Inicializar la base de datos
+init_db()
 
 app = FastAPI(
     title="API con Autenticación",
@@ -27,10 +25,8 @@ app = FastAPI(
     ],
 )
 
-# Templates
 templates = Jinja2Templates(directory="src/templates")
 
-# Include routers from different modules
 app.include_router(auth_router, prefix="/auth", tags=["Auth"])
 app.include_router(usuarios_router, prefix="/usuarios", tags=["Usuarios"])
 app.include_router(productos_router, prefix="/productos", tags=["Productos"])
@@ -38,7 +34,13 @@ app.include_router(programas_router, prefix="/programas", tags=["Programas"])
 app.include_router(proyectos_router, prefix="/proyectos", tags=["Proyectos"])
 
 @app.get("/", response_class=HTMLResponse, tags=["General"])
-async def read_root(request: Request, user: UsuarioCreate = Depends(get_current_user)):
-    return templates.TemplateResponse("index.html", {"request": request, "user": user})
+async def read_root(request: Request):
+    return templates.TemplateResponse("index.html", {"request": request})
 
-# Define more routers or additional configurations if needed
+@app.get("/dashboard", response_class=HTMLResponse, tags=["General"])
+async def dashboard(request: Request, user: models.Usuario = Depends(get_current_user)):
+    return templates.TemplateResponse("dashboard.html", {"request": request, "user": user})
+
+@app.get("/auth/login", response_class=HTMLResponse, tags=["Auth"])
+async def login(request: Request):
+    return templates.TemplateResponse("login.html", {"request": request})

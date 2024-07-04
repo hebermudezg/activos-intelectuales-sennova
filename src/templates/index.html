@@ -3,6 +3,12 @@
 {% block title %}Home{% endblock %}
 
 {% block content %}
-<h1>Welcome to My App</h1>
-<p>This is the home page.</p>
+<div class="jumbotron">
+    <h1 class="display-4">Welcome to My App!</h1>
+    <p class="lead">This is a simple application using FastAPI and Bootstrap for the frontend.</p>
+    <hr class="my-4">
+    <p>To get started, please log in or register an account.</p>
+    <a class="btn btn-primary btn-lg" href="/auth/login" role="button">Login</a>
+    <a class="btn btn-secondary btn-lg" href="/auth/register" role="button">Register</a>
+</div>
 {% endblock %}
