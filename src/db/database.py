@@ -4,7 +4,7 @@ from .models import Base
 import os
 
 # Establish database connection to PostgreSQL using SQLAlchemy.
-engine = create_engine('postgresql+psycopg2://postgres:123@localhost/ActivosIntelectualesBD')
+engine = create_engine('postgresql+psycopg2://postgres:1153@localhost:5432/ActivosIntelectualesBD')
 
 #DATABASE_URL = os.getenv('DATABASE_URL')
 #engine = create_engine(DATABASE_URL)

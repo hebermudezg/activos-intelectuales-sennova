@@ -44,3 +44,7 @@ async def dashboard(request: Request, user: models.Usuario = Depends(get_current
 @app.get("/auth/login", response_class=HTMLResponse, tags=["Auth"])
 async def login(request: Request):
     return templates.TemplateResponse("login.html", {"request": request})
+
+@app.get("/auth/register", response_class=HTMLResponse, tags=["Auth"])
+async def register(request: Request):
+    return templates.TemplateResponse("register.html", {"request": request})
