@@ -1,6 +1,3 @@
-
-
-
 -- Inserción en la tabla Usuario
 INSERT INTO usuario (id_usuario, nombre_completo, correo_electronico, telefono, rol)
 VALUES 
